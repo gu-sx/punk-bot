@@ -2,8 +2,10 @@
   "name": "punk-bot",
   "version": "1.0.0",
   "description": "Discord bot for managing the Punk guild",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
+    "dev": "nodemon ./src/index.ts",
+    "build": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +21,15 @@
   "bugs": {
     "url": "https://github.com/gu-sx/punk-bot/issues"
   },
-  "homepage": "https://github.com/gu-sx/punk-bot#readme"
+  "homepage": "https://github.com/gu-sx/punk-bot#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.3",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3"
+  }
 }
