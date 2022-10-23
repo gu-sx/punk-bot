@@ -1,4 +1,6 @@
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+
+const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const AbsenceCommand = require('./commands/absence');
 
 require('dotenv').config();
 
@@ -11,10 +13,31 @@ if (!BotToken) {
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+client.commands = new Collection();
+
+client.commands.set(AbsenceCommand.data.name, AbsenceCommand.execute);
+
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, (c: any) => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
+});
+
+client.on(Events.InteractionCreate, async (interaction: any) => {
+  if (!interaction.isChatInputCommand()) return;
+	const command = interaction.client.commands.get(interaction.commandName);
+
+	if (!command || command.length === 0) {
+		console.error(`No command matching ${interaction.commandName} was found.`);
+		return;
+	}
+
+	try {
+		await command(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
 });
 
 // Log in to Discord with your client's token
